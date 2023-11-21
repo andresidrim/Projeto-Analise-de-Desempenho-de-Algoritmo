@@ -10,9 +10,9 @@
 
 #pragma region Declarando Funções
 
-// void Print(const std::vector<float> &sample);
+void Print(const std::vector<float> &sample);
 void BubbleSort(std::vector<float> &sample);
-// void CreatePopulation(std::vector<float> &population);
+void CreatePopulation(std::vector<float> &population);
 void GenerateSample(std::vector<float> &sample, std::vector<float> population, int sampleSize);
 void Swap(float &a, float &b);
 void MergeSort(std::vector<float> &sample, int left, int right);
@@ -25,9 +25,9 @@ void ExportToCSV(const std::vector<std::vector<std::string>> &data, const std::s
 #pragma endregion
 
 enum SampleSizes {
-	SAMPLE_SIZE_1 = 300,
-	SAMPLE_SIZE_2 = 500,
-	SAMPLE_SIZE_3 = 800,
+	SAMPLE_SIZE_1 = 100,
+	SAMPLE_SIZE_2 = 1000,
+	SAMPLE_SIZE_3 = 10000,
 };
 
 enum SortValues {
@@ -36,13 +36,15 @@ enum SortValues {
 	QUICK_SORT, SAMPLE_3 = 2
 };
 
-#define EXEC_AMOUNT 100
+// #define EXEC_AMOUNT 1
 
 int main() {
 	// FUNCAO USADA PARA CRIAR A POPULACAO
-	// std::vector<float> population;
-	// CreatePopulation(population);
-	// Print(population);
+	// std::vector<float> populations;
+	// CreatePopulation(populations);
+	// Print(populations);
+
+	// std::cout << "tam: " << population.size();
 
 	// Variaveis das amostras
 	std::vector<float> sample1;
@@ -65,29 +67,29 @@ int main() {
 
 	results.push_back(col);
 
-	for (int i = 0; i < EXEC_AMOUNT; i++) {
-		RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
-		RunBubbleSortAndShowResults(sample2, 2, sample2RunTime);
-		RunBubbleSortAndShowResults(sample3, 3, sample3RunTime);
+	// for (int i = 0; i < EXEC_AMOUNT; i++) {
+	RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
+	RunBubbleSortAndShowResults(sample2, 2, sample2RunTime);
+	RunBubbleSortAndShowResults(sample3, 3, sample3RunTime);
 
-		results.push_back({ row.at(SAMPLE_1), sample1RunTime.at(BUBBLE_SORT), sample2RunTime.at(BUBBLE_SORT), sample3RunTime.at(BUBBLE_SORT) });
-	}
+	results.push_back({ row.at(SAMPLE_1), sample1RunTime.at(BUBBLE_SORT), sample2RunTime.at(BUBBLE_SORT), sample3RunTime.at(BUBBLE_SORT) });
+	// }
 
-	for (int i = 0; i < EXEC_AMOUNT; i++) {
-		RunMergeSortAndShowResults(sample1, 1, sample1RunTime);
-		RunMergeSortAndShowResults(sample2, 2, sample2RunTime);
-		RunMergeSortAndShowResults(sample3, 3, sample3RunTime);
+	// for (int i = 0; i < EXEC_AMOUNT; i++) {
+	RunMergeSortAndShowResults(sample1, 1, sample1RunTime);
+	RunMergeSortAndShowResults(sample2, 2, sample2RunTime);
+	RunMergeSortAndShowResults(sample3, 3, sample3RunTime);
 
-		results.push_back({ row.at(SAMPLE_2), sample1RunTime.at(MERGE_SORT), sample2RunTime.at(MERGE_SORT), sample3RunTime.at(MERGE_SORT) });
-	}
+	results.push_back({ row.at(SAMPLE_2), sample1RunTime.at(MERGE_SORT), sample2RunTime.at(MERGE_SORT), sample3RunTime.at(MERGE_SORT) });
+	// }
 
-	for (int i = 0; i < EXEC_AMOUNT; i++) {
-		RunQuickSortAndShowResults(sample1, 1, sample1RunTime);
-		RunQuickSortAndShowResults(sample2, 2, sample2RunTime);
-		RunQuickSortAndShowResults(sample3, 3, sample3RunTime);
+	// for (int i = 0; i < EXEC_AMOUNT; i++) {
+	RunQuickSortAndShowResults(sample1, 1, sample1RunTime);
+	RunQuickSortAndShowResults(sample2, 2, sample2RunTime);
+	RunQuickSortAndShowResults(sample3, 3, sample3RunTime);
 
-		results.push_back({ row.at(SAMPLE_3), sample1RunTime.at(QUICK_SORT), sample2RunTime.at(QUICK_SORT), sample3RunTime.at(QUICK_SORT) });
-	}
+	results.push_back({ row.at(SAMPLE_3), sample1RunTime.at(QUICK_SORT), sample2RunTime.at(QUICK_SORT), sample3RunTime.at(QUICK_SORT) });
+	// }
 
 	// Exportacao para csv
 	ExportToCSV(results, "assets/output.csv");
@@ -98,33 +100,33 @@ int main() {
 
 
 // FUNCOES //
-// void Print(const std::vector<float> &sample) {
-// 	std::cout << "[ ";
+void Print(const std::vector<float> &sample) {
+	std::cout << "[ ";
 
-// 	for (int i = 0; i < sample.size(); i++) {
-// 		i != sample.size() - 1 ? std::cout << sample.at(i) << ", " : std::cout << sample.at(i);
-// 	}
+	for (int i = 0; i < sample.size(); i++) {
+		i != sample.size() - 1 ? std::cout << sample.at(i) << ", " : std::cout << sample.at(i);
+	}
 
-// 	std::cout << " ]" << std::endl;
-// }
+	std::cout << " ]" << std::endl;
+}
 
-// void CreatePopulation(std::vector<float> &population) {
-// 	std::random_device rd;
-// 	std::mt19937 gen(rd());
+void CreatePopulation(std::vector<float> &population) {
+	std::random_device rd;
+	std::mt19937 gen(rd());
 
-// 	std::uniform_real_distribution<float> dist(0.0, 2000.0);
+	std::uniform_real_distribution<float> dist(0.0, 20000.0);
 
-// 	for (int i = 0; i < 2000; i++) {
-// 		float randomNumber = dist(gen);
-// 		population.push_back(randomNumber);
-// 	}
-// }
+	for (int i = 0; i < 20000; i++) {
+		float randomNumber = dist(gen);
+		population.push_back(randomNumber);
+	}
+}
 
 void GenerateSample(std::vector<float> &sample, std::vector<float> population, int sampleSize) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	std::uniform_real_distribution<float> dist(0, 1999);
+	std::uniform_real_distribution<float> dist(0, 19999);
 
 	for (int i = 0; i < sampleSize; i++) {
 		int randomNumber = dist(gen);

@@ -1,0 +1,4 @@
+AMOSTRA 1 (100),AMOSTRA 2 (1000),AMOSTRA 3 (10000)
+BUBBLE SORT,87 microsegundos,7182 microsegundos,802016 microsegundos
+MERGE SORT,74 microsegundos,721 microsegundos,9166 microsegundos
+QUICK SORT,10 microsegundos,152 microsegundos,2144 microsegundos
