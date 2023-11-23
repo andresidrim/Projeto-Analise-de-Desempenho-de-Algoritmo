@@ -1,0 +1,10 @@
+ORDENAÇÃO,TAM AMOSTRA,TEMPO
+BUBBLE SORT,100,138 microsegundos
+BUBBLE SORT,1000,12151 microsegundos
+BUBBLE SORT,10000,994861 microsegundos
+MERGE SORT,100,140 microsegundos
+MERGE SORT,1000,1734 microsegundos
+MERGE SORT,10000,12658 microsegundos
+QUICK SORT,100,11 microsegundos
+QUICK SORT,1000,159 microsegundos
+QUICK SORT,10000,2578 microsegundos
