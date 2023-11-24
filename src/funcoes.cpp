@@ -7,27 +7,203 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
+#include <cmath>
 
 #ifdef _WIN32
 #include <Windows.h>
+#include <VersionHelpers.h>
 
-void GetWindowsHardwareInfo() {
+std::string GetOSName() {
+  return "Windows";
+}
+
+int GetWindowsHardwareInfo(std::vector<std::string> &hardwareInfo) {
   SYSTEM_INFO sysInfo;
   GetSystemInfo(&sysInfo);
 
+  MEMORYSTATUSEX memoryStatus;
+  memoryStatus.dwLength = sizeof(memoryStatus);
+
   switch (sysInfo.wProcessorArchitecture) {
   case PROCESSOR_ARCHITECTURE_AMD64:
-    std::cout << "AMD x64\n";
+    hardwareInfo.push_back("x64");
     break;
   case PROCESSOR_ARCHITECTURE_INTEL:
-    std::cout << "INTEL x86\n";
+    hardwareInfo.push_back("x86");
     break;
   default:
-    std::cout << "Unknown\n";
+    std::cerr << "Architecture not found\n";
+    return EXIT_FAILURE;
   }
+
+  switch (sysInfo.dwProcessorType) {
+  case PROCESSOR_INTEL_386:
+    hardwareInfo.push_back("INTEL 386");
+    break;
+  case PROCESSOR_INTEL_486:
+    hardwareInfo.push_back("INTEL 486");
+    break;
+  case PROCESSOR_INTEL_PENTIUM:
+    hardwareInfo.push_back("INTEL PENTIUM");
+    break;
+  case PROCESSOR_INTEL_IA64:
+    hardwareInfo.push_back("INTEL IA64");
+    break;
+  case PROCESSOR_AMD_X8664:
+    hardwareInfo.push_back("AMD64");
+    break;
+  default:
+    std::cerr << "CPU type not found\n";
+    return EXIT_FAILURE;
+  }
+
+  if (GlobalMemoryStatusEx(&memoryStatus)) {
+    hardwareInfo.push_back(std::to_string(memoryStatus.ullTotalPhys / (1024 * 1024)));
+  }
+  else {
+    std::cerr << "Falha ao obter informações de memória." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  hardwareInfo.push_back(std::to_string(sysInfo.dwNumberOfProcessors));
+
+
+  return EXIT_SUCCESS;
 }
 
 #elif __APPLE__
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
+std::string GetOSName() {
+  return "MacOS";
+}
+
+int GetMacHardwareInfo(std::vector<std::string> &hardwareInfo) {
+  // Processor Architecture
+  const char *arch = nullptr;
+  size_t len = 0;
+  if (sysctlbyname("hw.machine", nullptr, &len, nullptr, 0) == 0) {
+    arch = new char[len];
+    sysctlbyname("hw.machine", (void *)arch, &len, nullptr, 0);
+    hardwareInfo.push_back(arch);
+    delete[] arch;
+  }
+  else {
+    std::cerr << "Architecture not found\n";
+    return EXIT_FAILURE;
+  }
+
+  // Processor Type
+  int type;
+  len = sizeof(type);
+  if (sysctlbyname("hw.cputype", &type, &len, nullptr, 0) == 0) {
+    switch (type) {
+    case CPU_TYPE_X86:
+      hardwareInfo.push_back("x86");
+      break;
+    case CPU_TYPE_X86_64:
+      hardwareInfo.push_back("x64");
+      break;
+    default:
+      std::cerr << "CPU type not found\n";
+      return EXIT_FAILURE;
+    }
+  }
+  else {
+    std::cerr << "CPU type not found\n";
+    return EXIT_FAILURE;
+  }
+
+  // Memory
+  int mib[2];
+  mib[0] = CTL_HW;
+  mib[1] = HW_MEMSIZE;
+  int64_t size = 0;
+  len = sizeof(size);
+  if (sysctl(mib, 2, &size, &len, nullptr, 0) == 0) {
+    hardwareInfo.push_back(std::to_string(size / (1024 * 1024)));
+  }
+  else {
+    std::cerr << "Failed to get memory information." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // Number of Processors
+  int cpuCount;
+  len = sizeof(cpuCount);
+  if (sysctlbyname("hw.logicalcpu", &cpuCount, &len, nullptr, 0) == 0) {
+    hardwareInfo.push_back(std::to_string(cpuCount));
+  }
+  else {
+    std::cerr << "Failed to get CPU information." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
+
+#elif __LINUX__
+#include <sstream>
+
+std::string GetOSName() {
+  return "Linux";
+}
+
+int GetLinuxHardwareInfo(std::vector<std::string> &hardwareInfo) {
+  // Processor Architecture
+  std::ifstream archFile("/proc/cpuinfo");
+  std::string line;
+  while (std::getline(archFile, line)) {
+    if (line.find("architecture") != std::string::npos) {
+      size_t pos = line.find(":");
+      if (pos != std::string::npos) {
+        hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the architecture information follows ": "
+        break;
+      }
+    }
+  }
+  archFile.close();
+
+  // Processor Type
+  std::ifstream cpuFile("/proc/cpuinfo");
+  while (std::getline(cpuFile, line)) {
+    if (line.find("model name") != std::string::npos) {
+      size_t pos = line.find(":");
+      if (pos != std::string::npos) {
+        hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the model name information follows ": "
+        break;
+      }
+    }
+  }
+  cpuFile.close();
+
+  // Memory
+  std::ifstream memFile("/proc/meminfo");
+  while (std::getline(memFile, line)) {
+    if (line.find("MemTotal") != std::string::npos) {
+      std::istringstream iss(line);
+      std::string token, value;
+      iss >> token >> value;
+      hardwareInfo.push_back(value);
+      break;
+    }
+  }
+  memFile.close();
+
+  // Number of Processors
+  int cpuCount = std::thread::hardware_concurrency();
+  if (cpuCount > 0) {
+    hardwareInfo.push_back(std::to_string(cpuCount));
+  }
+  else {
+    std::cerr << "Failed to get CPU information." << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
+}
+
 #endif
 
 // FUNCOES //
@@ -242,4 +418,10 @@ void ExportToCSV(const std::vector<std::vector<std::string>> &data, const std::s
 
     csvFile.close();
   }
+}
+
+int GetCSVPos(const std::string &name) {
+  std::ofstream csvFile(name, std::ios::app);
+
+  return csvFile.tellp();
 }
