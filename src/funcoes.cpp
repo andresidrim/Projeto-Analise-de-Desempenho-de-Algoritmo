@@ -476,15 +476,14 @@ int IsSpecsInCSV(const std::string &name, int &id, const std::string &so, const 
       if (csvSo == so && csvArquitetura == arquitetura && csvTipo == tipo && csvNucleos == nucleos && csvRam == ram) {
         csvFile.close();
         id = currentId;
-        std::cout << "Configuracao ja existente na linha " << id;
+        std::cout << "Configuracao ja existente na linha " << id << "\n";
         return 1;
       }
     }
   }
+  csvFile.close();
 
   id = GetCSVPos(name);
-  std::cout << "Configuracao nova\nAdicionando no arquivo...";
-
-  csvFile.close();
+  std::cout << "Configuracao nova detectada\nAdicionando no arquivo... \n";
   return 0;
 }
