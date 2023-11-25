@@ -8,36 +8,46 @@ enum SampleSizes {
 };
 
 enum SortValues {
-	BUBBLE_SORT, SAMPLE_1 = 0,
-	MERGE_SORT, SAMPLE_2 = 1,
-	QUICK_SORT, SAMPLE_3 = 2
+	BUBBLE_SORT, SAMPLE_1, ARQUITETURA = 0,
+	MERGE_SORT, SAMPLE_2, TIPO = 1,
+	QUICK_SORT, SAMPLE_3, QTD_RAM = 2,
+	QTD_NUCLEOS = 3
 };
 
 int main() {
 	std::vector<std::string> hardwareInfo;
 	GetWindowsHardwareInfo(hardwareInfo);
 
-	std::cout << hardwareInfo.at(0) << "\n" << hardwareInfo.at(1) << "\n" << hardwareInfo.at(2) << "\n" << hardwareInfo.at(3) << std::endl;
+	std::vector<std::vector<std::string>> specs;
 
-	std::cout << GetOSName() << std::endl;
+	int lastLine;
+	int id = 1;
 
-	int lastLine = GetCSVPos("results/output.csv");
+	lastLine = GetCSVPos("results/specs.csv");
+
+	if (lastLine == 0) {
+		specs.push_back({ "ID", "SO", "ARQUITETURA DA CPU", "TIPO DA CPU", "QTD NUCLEOS", "QTD RAM" });
+	}
+
+	if (!IsSpecsInCSV("results/specs.csv", id, GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM))) {
+		specs.push_back({ std::to_string(id), GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM) });
+	}
+
+	// Exportacao para csv
+	ExportToCSV(specs, "results/specs.csv");
 
 	// FUNCAO USADA PARA CRIAR A POPULACAO
-	// std::vector<float> populations;
-	// CreatePopulation(populations);
-	// Print(populations);
-
-	// std::cout << "tam: " << population.size();
+	// std::vector<float> pop;
+	// CreatePopulation(pop);
+	// Print(pop);
 
 	// Variaveis das amostras
 	std::vector<float> sample1;
 	std::vector<float> sample2;
 	std::vector<float> sample3;
 
-	// Colunas do csv
-	std::vector<std::string> col = { "ORDENAÇÃO", "TAM AMOSTRA", "TEMPO" };
-	std::vector<std::string> row = { "BUBBLE SORT", "MERGE SORT", "QUICK SORT" };
+	// Header do csv
+	std::vector<std::string> header = { "TAM AMOSTRA", "TEMPO", "SPECS_ID" };
 	std::vector<std::string> sample1RunTime;
 	std::vector<std::string> sample2RunTime;
 	std::vector<std::string> sample3RunTime;
@@ -49,37 +59,60 @@ int main() {
 	GenerateSample(sample2, population, SAMPLE_SIZE_2);
 	GenerateSample(sample3, population, SAMPLE_SIZE_3);
 
-
-	if (lastLine == 0) {
-		results.push_back(col);
-	}
-
 	RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
 	RunBubbleSortAndShowResults(sample2, 2, sample2RunTime);
 	RunBubbleSortAndShowResults(sample3, 3, sample3RunTime);
 
-	results.push_back({ row.at(SAMPLE_1), std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(BUBBLE_SORT) });
-	results.push_back({ row.at(SAMPLE_1), std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(BUBBLE_SORT) });
-	results.push_back({ row.at(SAMPLE_1), std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(BUBBLE_SORT) });
+	lastLine = GetCSVPos("results/bubble.csv");
+
+	if (lastLine == 0) {
+		results.push_back(header);
+	}
+
+	results.push_back({ std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(BUBBLE_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(BUBBLE_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(BUBBLE_SORT), std::to_string(id) });
+
+	// Exportacao para csv
+	ExportToCSV(results, "results/bubble.csv");
+
+	results.clear();
 
 	RunMergeSortAndShowResults(sample1, 1, sample1RunTime);
 	RunMergeSortAndShowResults(sample2, 2, sample2RunTime);
 	RunMergeSortAndShowResults(sample3, 3, sample3RunTime);
 
-	results.push_back({ row.at(SAMPLE_2), std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(MERGE_SORT) });
-	results.push_back({ row.at(SAMPLE_2), std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(MERGE_SORT) });
-	results.push_back({ row.at(SAMPLE_2), std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(MERGE_SORT) });
+	lastLine = GetCSVPos("results/merge.csv");
+
+	if (lastLine == 0) {
+		results.push_back(header);
+	}
+
+	results.push_back({ std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(MERGE_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(MERGE_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(MERGE_SORT), std::to_string(id) });
+
+	// Exportacao para csv
+	ExportToCSV(results, "results/merge.csv");
+
+	results.clear();
 
 	RunQuickSortAndShowResults(sample1, 1, sample1RunTime);
 	RunQuickSortAndShowResults(sample2, 2, sample2RunTime);
 	RunQuickSortAndShowResults(sample3, 3, sample3RunTime);
 
-	results.push_back({ row.at(SAMPLE_3), std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(QUICK_SORT) });
-	results.push_back({ row.at(SAMPLE_3), std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(QUICK_SORT) });
-	results.push_back({ row.at(SAMPLE_3), std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(QUICK_SORT) });
+	lastLine = GetCSVPos("results/quick.csv");
+
+	if (lastLine == 0) {
+		results.push_back(header);
+	}
+
+	results.push_back({ std::to_string(SAMPLE_SIZE_1), sample1RunTime.at(QUICK_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_2), sample2RunTime.at(QUICK_SORT), std::to_string(id) });
+	results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(QUICK_SORT), std::to_string(id) });
 
 	// Exportacao para csv
-	ExportToCSV(results, "results/output.csv");
+	ExportToCSV(results, "results/quick.csv");
 
 	return EXIT_SUCCESS;
 }

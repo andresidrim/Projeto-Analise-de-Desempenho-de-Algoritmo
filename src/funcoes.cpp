@@ -58,7 +58,7 @@ int GetWindowsHardwareInfo(std::vector<std::string> &hardwareInfo) {
   }
 
   if (GlobalMemoryStatusEx(&memoryStatus)) {
-    hardwareInfo.push_back(std::to_string(memoryStatus.ullTotalPhys / (1024 * 1024)));
+    hardwareInfo.push_back(std::to_string(memoryStatus.ullTotalPhys / (1024 * 1024)) + " MB");
   }
   else {
     std::cerr << "Falha ao obter informações de memória." << std::endl;
@@ -421,7 +421,70 @@ void ExportToCSV(const std::vector<std::vector<std::string>> &data, const std::s
 }
 
 int GetCSVPos(const std::string &name) {
-  std::ofstream csvFile(name, std::ios::app);
+  std::vector<std::string> currentLine;
 
-  return csvFile.tellp();
+  std::ifstream csvFile(name);
+
+  if (csvFile.is_open()) {
+
+    std::string line;
+    while (std::getline(csvFile, line)) {
+      currentLine.push_back(line);
+    }
+  }
+
+  csvFile.close();
+
+  return currentLine.size();
+}
+
+int IsSpecsInCSV(const std::string &name, int &id, const std::string &so, const std::string &arquitetura, const std::string &tipo, const std::string &nucleos, const std::string &ram) {
+
+  std::ifstream csvFile(name);
+  int currentId = 0;
+
+  if (csvFile.is_open()) {
+    if (GetCSVPos(name) == 0) {
+      csvFile.close();
+      std::cout << "Configuracao nova\nAdicionando no arquivo...";
+      return 0;
+    }
+
+    std::string csvCabecalho, csvId, csvSo, csvArquitetura, csvTipo, csvNucleos, csvRam;
+
+    std::getline(csvFile, csvCabecalho);
+
+    while (csvFile.good()) {
+      std::string linha;
+      getline(csvFile, linha);
+
+      if (linha.empty()) {
+        continue;
+      }
+
+      currentId++;
+
+      std::stringstream ss(linha);
+
+      getline(ss, csvId, ',');
+      getline(ss, csvSo, ',');
+      getline(ss, csvArquitetura, ',');
+      getline(ss, csvTipo, ',');
+      getline(ss, csvNucleos, ',');
+      getline(ss, csvRam);
+
+      if (csvSo == so && csvArquitetura == arquitetura && csvTipo == tipo && csvNucleos == nucleos && csvRam == ram) {
+        csvFile.close();
+        id = currentId;
+        std::cout << "Configuracao ja existente na linha " << id;
+        return 1;
+      }
+    }
+  }
+
+  id = GetCSVPos(name);
+  std::cout << "Configuracao nova\nAdicionando no arquivo...";
+
+  csvFile.close();
+  return 0;
 }
