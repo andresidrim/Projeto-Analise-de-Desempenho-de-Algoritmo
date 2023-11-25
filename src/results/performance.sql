@@ -52,18 +52,23 @@ SELECT * FROM AllQuickSortInfo;
 SELECT b.sample_size, b.run_time, p.operating_system, p.cpu_architecture, p.cpu_type, p.cpu_cores, p.ram_size FROM BUBBLESORT b
 JOIN PC_SPECS p ON p.id = b.pc_specs_id;
 
-DELETE FROM PC_SPECS;
+
 COPY PC_SPECS FROM 'C:/Users/andre/Desktop/Pastas/Programas/CESUPA/Probabilidade e Estatistica/VS Code/Projeto Giras/src/results/specs.csv'
 DELIMITER ',' CSV HEADER;
 
-DELETE FROM BUBBLESORT;
+
 COPY BUBBLESORT FROM 'C:/Users/andre/Desktop/Pastas/Programas/CESUPA/Probabilidade e Estatistica/VS Code/Projeto Giras/src/results/bubble.csv'
 DELIMITER ',' CSV HEADER;
 
-DELETE FROM MERGESORT;
+
 COPY MERGESORT FROM 'C:/Users/andre/Desktop/Pastas/Programas/CESUPA/Probabilidade e Estatistica/VS Code/Projeto Giras/src/results/merge.csv'
 DELIMITER ',' CSV HEADER;
 
-DELETE FROM QUICKSORT;
+
 COPY QUICKSORT FROM 'C:/Users/andre/Desktop/Pastas/Programas/CESUPA/Probabilidade e Estatistica/VS Code/Projeto Giras/src/results/quick.csv'
 DELIMITER ',' CSV HEADER;
+
+DELETE FROM PC_SPECS;
+DELETE FROM QUICKSORT;
+DELETE FROM MERGESORT;
+DELETE FROM BUBBLESORT;
