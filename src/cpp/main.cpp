@@ -44,9 +44,6 @@ int main() {
 	std::vector<std::string> sample2RunTime;
 	std::vector<std::string> sample3RunTime;
 
-
-
-
 	// Geração das amostras
 	GenerateSample(sample1, population, SAMPLE_SIZE_1);
 	GenerateSample(sample2, population, SAMPLE_SIZE_2);
@@ -56,28 +53,25 @@ int main() {
 	std::vector<std::string> header = { "TAM AMOSTRA", "TEMPO", "SPECS_ID" };
 	std::vector<std::vector<std::string>> results;
 
+	lastLine = GetCSVPos("../results/specs.csv");
+
+	if (lastLine == 0) {
+		specs.push_back({ "ID", "SO", "ARQUITETURA DA CPU", "TIPO DA CPU", "QTD NUCLEOS", "QTD RAM" });
+	}
+
+	if (!IsSpecsInCSV("../results/specs.csv", id, GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM))) {
+		specs.push_back({ std::to_string(id), GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM) });
+	}
+
+	// Exportacao para csv
+	ExportToCSV(specs, "../results/specs.csv");
+
 	for (int i = 0; i < 1000; i++) {
-		lastLine = GetCSVPos("results/specs.csv");
-
-		if (lastLine == 0) {
-			specs.push_back({ "ID", "SO", "ARQUITETURA DA CPU", "TIPO DA CPU", "QTD NUCLEOS", "QTD RAM" });
-		}
-
-		if (!IsSpecsInCSV("results/specs.csv", id, GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM))) {
-			specs.push_back({ std::to_string(id), GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM) });
-		}
-
-		// Exportacao para csv
-		ExportToCSV(specs, "results/specs.csv");
-
-		specs.clear();
-		results.clear();
-
 		RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
 		RunBubbleSortAndShowResults(sample2, 2, sample2RunTime);
 		RunBubbleSortAndShowResults(sample3, 3, sample3RunTime);
 
-		lastLine = GetCSVPos("results/bubble.csv");
+		lastLine = GetCSVPos("../results/bubble.csv");
 
 		if (lastLine == 0) {
 			results.push_back(header);
@@ -88,7 +82,7 @@ int main() {
 		results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(BUBBLE_SORT), std::to_string(id) });
 
 		// Exportacao para csv
-		ExportToCSV(results, "results/bubble.csv");
+		ExportToCSV(results, "../results/bubble.csv");
 
 		results.clear();
 
@@ -96,7 +90,7 @@ int main() {
 		RunMergeSortAndShowResults(sample2, 2, sample2RunTime);
 		RunMergeSortAndShowResults(sample3, 3, sample3RunTime);
 
-		lastLine = GetCSVPos("results/merge.csv");
+		lastLine = GetCSVPos("../results/merge.csv");
 
 		if (lastLine == 0) {
 			results.push_back(header);
@@ -107,7 +101,7 @@ int main() {
 		results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(MERGE_SORT), std::to_string(id) });
 
 		// Exportacao para csv
-		ExportToCSV(results, "results/merge.csv");
+		ExportToCSV(results, "../results/merge.csv");
 
 		results.clear();
 
@@ -115,7 +109,7 @@ int main() {
 		RunQuickSortAndShowResults(sample2, 2, sample2RunTime);
 		RunQuickSortAndShowResults(sample3, 3, sample3RunTime);
 
-		lastLine = GetCSVPos("results/quick.csv");
+		lastLine = GetCSVPos("../results/quick.csv");
 
 		if (lastLine == 0) {
 			results.push_back(header);
@@ -126,7 +120,9 @@ int main() {
 		results.push_back({ std::to_string(SAMPLE_SIZE_3), sample3RunTime.at(QUICK_SORT), std::to_string(id) });
 
 		// Exportacao para csv
-		ExportToCSV(results, "results/quick.csv");
+		ExportToCSV(results, "../results/quick.csv");
+
+		results.clear();
 	}
 
 	return EXIT_SUCCESS;

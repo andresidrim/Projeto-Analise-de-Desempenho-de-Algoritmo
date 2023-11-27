@@ -366,7 +366,7 @@ void RunBubbleSortAndShowResults(std::vector<float> sample, int sampleNumber, st
   auto endTimer = std::chrono::high_resolution_clock::now();
   auto timerDuration = std::chrono::duration_cast<std::chrono::microseconds>(endTimer - startTimer);
 
-  runTime.push_back(std::to_string(timerDuration.count()) + " microsegundos");
+  runTime.push_back(std::to_string(timerDuration.count()));
 
   // Print(sortedSample, sampleNumber);
   // std::cout << "Run time: " << runTime.at(0) << "\n" << std::endl;
@@ -380,7 +380,7 @@ void RunMergeSortAndShowResults(std::vector<float> sample, int sampleNumber, std
   auto endTimer = std::chrono::high_resolution_clock::now();
   auto timerDuration = std::chrono::duration_cast<std::chrono::microseconds>(endTimer - startTimer);
 
-  runTime.push_back(std::to_string(timerDuration.count()) + " microsegundos");
+  runTime.push_back(std::to_string(timerDuration.count()));
 
   // Print(sortedSample, sampleNumber);
   // std::cout << "Run time: " << runTime.at(1) << "\n" << std::endl;
@@ -394,7 +394,7 @@ void RunQuickSortAndShowResults(std::vector<float> sample, int sampleNumber, std
   auto endTimer = std::chrono::high_resolution_clock::now();
   auto timerDuration = std::chrono::duration_cast<std::chrono::microseconds>(endTimer - startTimer);
 
-  runTime.push_back(std::to_string(timerDuration.count()) + " microsegundos");
+  runTime.push_back(std::to_string(timerDuration.count()));
 
   // Print(sortedSample, sampleNumber);
   // std::cout << "Run time: " << runTime.at(2) << "\n" << std::endl;
