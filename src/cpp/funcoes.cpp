@@ -446,7 +446,7 @@ int IsSpecsInCSV(const std::string &name, int &id, const std::string &so, const 
   if (csvFile.is_open()) {
     if (GetCSVPos(name) == 0) {
       csvFile.close();
-      std::cout << "Configuracao nova\nAdicionando no arquivo...";
+      std::cout << "Configuracao nova detectada!\nAdicionando no arquivo...";
       return 0;
     }
 
