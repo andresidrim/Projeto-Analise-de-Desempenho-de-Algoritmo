@@ -63,13 +63,18 @@ int main() {
 		specs.push_back({ std::to_string(id), GetOSName(), hardwareInfo.at(ARQUITETURA), hardwareInfo.at(TIPO), hardwareInfo.at(QTD_NUCLEOS), hardwareInfo.at(QTD_RAM) });
 	}
 
-	// Exportacao para csv
+	std::cout << "Configuração salva\n\n";
 	ExportToCSV(specs, "../results/specs.csv");
 
+	// Exportacao para csv
 	for (int i = 0; i < 1000; i++) {
+		std::cout << "Executando BubbleSort...\n\n";
+
 		RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
 		RunBubbleSortAndShowResults(sample2, 2, sample2RunTime);
 		RunBubbleSortAndShowResults(sample3, 3, sample3RunTime);
+
+		std::cout << "Salvando resultados...\n\n";
 
 		lastLine = GetCSVPos("../results/bubble.csv");
 
@@ -84,11 +89,17 @@ int main() {
 		// Exportacao para csv
 		ExportToCSV(results, "../results/bubble.csv");
 
+		std::cout << "Resultados salvos com successo\n\n";
+
 		results.clear();
+
+		std::cout << "Executando MergeSort...\n\n";
 
 		RunMergeSortAndShowResults(sample1, 1, sample1RunTime);
 		RunMergeSortAndShowResults(sample2, 2, sample2RunTime);
 		RunMergeSortAndShowResults(sample3, 3, sample3RunTime);
+
+		std::cout << "Salvando resultados...\n\n";
 
 		lastLine = GetCSVPos("../results/merge.csv");
 
@@ -103,11 +114,17 @@ int main() {
 		// Exportacao para csv
 		ExportToCSV(results, "../results/merge.csv");
 
+		std::cout << "Resultados salvos com successo\n\n";
+
 		results.clear();
+
+		std::cout << "Executando QuickSort...\n\n";
 
 		RunQuickSortAndShowResults(sample1, 1, sample1RunTime);
 		RunQuickSortAndShowResults(sample2, 2, sample2RunTime);
 		RunQuickSortAndShowResults(sample3, 3, sample3RunTime);
+
+		std::cout << "Salvando resultados...\n\n";
 
 		lastLine = GetCSVPos("../results/quick.csv");
 
@@ -121,6 +138,8 @@ int main() {
 
 		// Exportacao para csv
 		ExportToCSV(results, "../results/quick.csv");
+
+		std::cout << "Resultados salvos com successo\n\n";
 
 		results.clear();
 	}
