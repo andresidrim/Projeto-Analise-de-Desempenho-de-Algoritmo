@@ -67,7 +67,7 @@ int main() {
 	ExportToCSV(specs, "../results/specs.csv");
 
 	// Exportacao para csv
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1000; i++) {
 		std::cout << "Executando BubbleSort...\n";
 
 		RunBubbleSortAndShowResults(sample1, 1, sample1RunTime);
