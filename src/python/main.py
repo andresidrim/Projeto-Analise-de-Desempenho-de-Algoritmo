@@ -1,7 +1,9 @@
 from dbconnection import *
 import numpy as np
 from scipy.stats import ttest_ind, t
+from sklearn.metrics import r2_score
 from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
 BubbleSort = [bubbleSort[(bubbleSort['sample_size'] == 100) & (bubbleSort['pc_specs_id'] == 1)]['run_time'],
     bubbleSort[(bubbleSort['sample_size'] == 1000) & (bubbleSort['pc_specs_id'] == 1)]['run_time'],
@@ -127,17 +129,6 @@ print(f"Intervalo de Confiança: {intervalo_confianca}")
 
 
 
-sizes = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'sample_size'].values
-execution_times = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'run_time'].values
-
-# Realize a regressão quadrática
-coefficients = np.polyfit(sizes, execution_times, 2)
-quadratic_eq = np.poly1d(coefficients)
-
-# Calcule o coeficiente de determinação (R²)
-r_squared = 1 - np.sum((execution_times - quadratic_eq(sizes))**2) / np.sum((execution_times - np.mean(execution_times))**2)
-print(f"Coeficiente de Determinação (R²): {r_squared}")
-# R² = 1 -> Segue ordem quadrática
 
 
 
@@ -146,17 +137,90 @@ print(f"Coeficiente de Determinação (R²): {r_squared}")
 
 
 
+sizes_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'sample_size'].values
+execution_times_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'run_time'].values
 
-sizes = quickSort.loc[quickSort['pc_specs_id'] == 1, 'sample_size'].values
-execution_times = quickSort.loc[quickSort['pc_specs_id'] == 1, 'run_time'].values
+# Função quadrática (polinômio de grau 2)
+def quadratic_func(x, a, b, c):
+    return a * x**2 + b * x + c
 
-# Realize a regressão linear
-coefficients = np.polyfit(sizes, execution_times, 1)
-linear_eq = np.poly1d(coefficients)
+# Ajuste dos dados à função quadrática
+params_bubble, covariance_bubble = curve_fit(quadratic_func, sizes_bubble, execution_times_bubble)
 
-# Calcule o coeficiente de determinação (R²)
-r_squared = 1 - np.sum((execution_times - linear_eq(sizes))**2) / np.sum((execution_times - np.mean(execution_times))**2)
-print(f"Coeficiente de Determinação (R²): {r_squared}")
-# R² = 1 -> Segue ordem linear
+# Previsões usando a função ajustada
+predictions_bubble = quadratic_func(sizes_bubble, *params_bubble)
+
+# Cálculo do R²
+r_squared_bubble = r2_score(execution_times_bubble, predictions_bubble)
+
+# Impressão do R²
+print(f"Coeficiente de Determinação (R²) para Bubble Sort: {r_squared_bubble}")
+
+
+
+
+
+
+
+
+sizes_merge = mergeSort.loc[mergeSort['pc_specs_id'] == 1, 'sample_size'].values
+execution_times_merge = mergeSort.loc[mergeSort['pc_specs_id'] == 1, 'run_time'].values
+
+# Função logarítmica (O(n log n))
+def log_func(x, a, b):
+    return a * x * np.log(x) + b
+
+# Ajuste dos dados à função logarítmica
+params_merge, covariance_merge = curve_fit(log_func, sizes_merge, execution_times_merge)
+
+# Previsões usando a função ajustada
+predictions_merge = log_func(sizes_merge, *params_merge)
+
+# Cálculo do R²
+r_squared_merge = r2_score(execution_times_merge, predictions_merge)
+
+# Impressão do R²
+print(f"Coeficiente de Determinação (R²) para Merge Sort: {r_squared_merge}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sizes_quick = quickSort.loc[quickSort['pc_specs_id'] == 1, 'sample_size'].values
+execution_times_quick = quickSort.loc[quickSort['pc_specs_id'] == 1, 'run_time'].values
+
+# Função linear (O(n))
+def linear_func(x, a, b):
+    return a * x + b
+
+# Ajuste dos dados à função linear
+params_quick, covariance_quick = curve_fit(linear_func, sizes_quick, execution_times_quick)
+
+# Previsões usando a função ajustada
+predictions_quick = linear_func(sizes_quick, *params_quick)
+
+# Cálculo do R²
+r_squared_quick = r2_score(execution_times_quick, predictions_quick)
+
+# Impressão do R²
+print(f"Coeficiente de Determinação (R²) para Quick Sort: {r_squared_quick}")
 
 
