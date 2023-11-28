@@ -1,3 +1,5 @@
+from senha import senha
+
 import psycopg2
 import pandas as pd
 
@@ -6,7 +8,7 @@ try:
         host='localhost',
         database='performance_data',
         user='postgres',
-        password='03jul2004'
+        password=senha
     )
 
     cursor = conexao.cursor()
