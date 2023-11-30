@@ -19,7 +19,7 @@ def main():
     print('\n\n')
     IntervaloConfianca(QuickSortRunTime, 'Quick Sort') # Intervalo Quick Sort
     print('\n\n\n\n\n')
-    MaisRapidoPorcentagem() # Qual o algoritimo mais rapido para cada tamanho de amostra?
+    MaisRapidoPorcentagem() # Quão mais rápido é o Quick Sort em relação aos outros algoritimos?
     
 
 
