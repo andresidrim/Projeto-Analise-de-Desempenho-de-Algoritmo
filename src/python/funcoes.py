@@ -5,8 +5,6 @@ from scipy.stats import ttest_ind, t
 from sklearn.metrics import r2_score
 from scipy.optimize import curve_fit
 
-GetBubbleSort()[0].mean()
-
 def MaisRapidoPorcentagem(bubble, merge, quick):
   for i in range(0, 3, 1):
     mediaqs = quick[i].mean()
@@ -185,7 +183,7 @@ def CalculandoQuickSortR2(spec_id = ''):
 
   # Função linear (O(n))
   def linear_func(x, a, b):
-      return a * x + b
+      return a * x * np.log(x) + b
 
   # Ajuste dos dados à função linear
   params_quick, covariance_quick = curve_fit(linear_func, sizes_quick, execution_times_quick)
