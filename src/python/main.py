@@ -36,9 +36,30 @@ def main():
 
 
     # Hipotese -> Bubble Sort e Merge Sort possuem um desempeho extremamente similar para amostras menores 
-    Hipotese1() # Compara o Bubble Sort e Merge Sort com amostras de tamanho 100
-    MergeMaisRapido() # Quão mais rápido é o Merge Sort em relação ao Bubble Sort?
-    print('\n\n\n\n\n')
+    for i in range(0, pcSpecs['id'].count() + 1, 1):
+        if (i == 0):
+            print('No geral:')
+            Hipotese1()
+            print('\n\n')
+
+        else:
+            print(f'Para o computador {i}:')
+            Hipotese1(i)
+            print('\n\n')
+    # Hipotese1() # Compara o Bubble Sort e Merge Sort com amostras de tamanho 100
+    
+    for i in range(0, pcSpecs['id'].count() + 1, 1):
+        if (i == 0):
+            print('No geral:')
+            MergeMaisRapido()
+            print('\n\n')
+        
+        else:
+            print(f'Para o computador {i}:')
+            MergeMaisRapido(i)
+            print('\n\n')
+
+    print('\n\n\n')
     
     for i in range(0, pcSpecs['id'].count() + 1, 1):
         if (i == 0):

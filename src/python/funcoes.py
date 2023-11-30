@@ -46,19 +46,28 @@ def DescricaoAlgoritimo(algoritimo, nome):
 
 # Hipotese 1 -> BubbleSortRunTimeGeral e MergeSortRunTimeGeral possuem um desempeho extremamente similar para amostras menores
 
-def Hipotese1():
+def Hipotese1(spec_id = ''):
   alpha = 0.05
 
-  t_statistic, p_value = ttest_ind(GetBubbleSort()[0], GetMergeSort()[0])
+  if spec_id == '':
+    t_statistic, p_value = ttest_ind(GetBubbleSort()[0], GetMergeSort()[0])
+
+  else:
+    t_statistic, p_value = ttest_ind(GetBubbleSort(spec_id)[0], GetMergeSort(spec_id)[0])
 
   if p_value < alpha:
       print("Para a amostra de tamanho 100, rejeitamos a hipótese nula.") # Possui uma diferenca significativa
   else:
       print("Para a amostra de tamanho 100, não temos evidências para rejeitar a hipótese nula")
 
-def MergeMaisRapido():
-  media_bubble_sort = np.mean(GetBubbleSort()[0])
-  media_merge_sort = np.mean(GetMergeSort()[0])
+def MergeMaisRapido(spec_id = ''):
+  if spec_id == '':
+    media_bubble_sort = np.mean(GetBubbleSort()[0])
+    media_merge_sort = np.mean(GetMergeSort()[0])
+
+  else:
+    media_bubble_sort = np.mean(GetBubbleSort(spec_id)[0])
+    media_merge_sort = np.mean(GetMergeSort(spec_id)[0])
 
   # Cálculo da diferença percentual entre os tempos médios
   diferenca_percentual = abs(((media_merge_sort - media_bubble_sort) / media_bubble_sort)) * 100

@@ -8,6 +8,7 @@
 #include <string>
 #include <fstream>
 #include <cmath>
+#include <sstream>
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -99,10 +100,10 @@ int GetMacHardwareInfo(std::vector<std::string> &hardwareInfo) {
   len = sizeof(type);
   if (sysctlbyname("hw.cputype", &type, &len, nullptr, 0) == 0) {
     switch (type) {
-    case CPU_TYPE_X86:
-      hardwareInfo.push_back("x86");
+    case CPU_TYPE_ARM64:
+      hardwareInfo.push_back("arm 64");
       break;
-    case CPU_TYPE_X86_64:
+    case CPU_TYPE_X86:
       hardwareInfo.push_back("x64");
       break;
     default:
@@ -144,7 +145,6 @@ int GetMacHardwareInfo(std::vector<std::string> &hardwareInfo) {
 }
 
 #elif __LINUX__
-#include <sstream>
 
 std::string GetOSName() {
   return "Linux";
