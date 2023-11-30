@@ -70,9 +70,12 @@ def MergeMaisRapido(spec_id = ''):
     media_merge_sort = np.mean(GetMergeSort(spec_id)[0])
 
   # Cálculo da diferença percentual entre os tempos médios
-  diferenca_percentual = abs(((media_merge_sort - media_bubble_sort) / media_bubble_sort)) * 100
-
-  print(f"O Merge Sort é {diferenca_percentual:.2f}% mais rápido em relação ao Bubble Sort nesse caso")
+  if media_merge_sort < media_bubble_sort:
+    diferenca_percentual = abs(((media_merge_sort - media_bubble_sort) / media_bubble_sort)) * 100
+    print(f"O Merge Sort é {diferenca_percentual:.2f}% mais rápido em relação ao Bubble Sort nesse caso")
+  else:
+    diferenca_percentual = abs(((media_bubble_sort - media_merge_sort) / media_merge_sort)) * 100
+    print(f"O Bubble Sort é {diferenca_percentual:.2f}% mais rápido em relação ao Merge Sort nesse caso")
 
 
 # Qual o algoritimo mais rapido para cada tamanho de amostra?
@@ -90,7 +93,8 @@ def ClassificacaoAlgoritimos(spec_id = ''):
       # Imprimindo o pódio para o tamanho de amostra atual
       print(f"Para o tamanho de amostra {np.power(10, i + 2)}:")
       for posicao, (algoritmo, media) in enumerate(resultados, start=1):
-          print(f"{posicao}º lugar: {algoritmo} com média de {media:.4f} microsegundos")
+        print(f"{posicao}º lugar: {algoritmo} com média de {media:.4f} microsegundos")
+      print('\n')
 
 
 
@@ -110,9 +114,14 @@ def IntervaloConfianca(algoritimo, nome, alpha = 0.05):
 
 
 
-def CalculandoBubbleSortR2():
-    sizes_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'sample_size'].values
-    execution_times_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == 1, 'run_time'].values
+def CalculandoBubbleSortR2(spec_id = ''):
+    if spec_id == '':
+      sizes_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'], 'sample_size'].values
+      execution_times_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'], 'run_time'].values
+       
+    else:
+      sizes_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == spec_id, 'sample_size'].values
+      execution_times_bubble = bubbleSort.loc[bubbleSort['pc_specs_id'] == spec_id, 'run_time'].values
 
     # Função quadrática (polinômio de grau 2)
     def quadratic_func(x, a, b, c):
@@ -133,13 +142,15 @@ def CalculandoBubbleSortR2():
 
 
 
+def CalculandoMergeSortR2(spec_id = ''):
+  if spec_id == '':
+    sizes_merge = mergeSort.loc[mergeSort['pc_specs_id'], 'sample_size'].values
+    execution_times_merge = mergeSort.loc[mergeSort['pc_specs_id'], 'run_time'].values
 
+  else:
+    sizes_merge = mergeSort.loc[mergeSort['pc_specs_id'] == spec_id, 'sample_size'].values
+    execution_times_merge = mergeSort.loc[mergeSort['pc_specs_id'] == spec_id, 'run_time'].values
 
-
-
-def CalculandoMergeSortR2():
-  sizes_merge = mergeSort.loc[mergeSort['pc_specs_id'] == 1, 'sample_size'].values
-  execution_times_merge = mergeSort.loc[mergeSort['pc_specs_id'] == 1, 'run_time'].values
 
   # Função linearitimica (O(n log n))
   def log_func(x, a, b):
@@ -161,9 +172,16 @@ def CalculandoMergeSortR2():
 
 
 
-def CalculandoQuickSortR2():
-  sizes_quick = quickSort.loc[quickSort['pc_specs_id'] == 1, 'sample_size'].values
-  execution_times_quick = quickSort.loc[quickSort['pc_specs_id'] == 1, 'run_time'].values
+def CalculandoQuickSortR2(spec_id = ''):
+  if spec_id == '':
+    sizes_quick = quickSort.loc[mergeSort['pc_specs_id'], 'sample_size'].values
+    execution_times_quick = quickSort.loc[mergeSort['pc_specs_id'], 'run_time'].values
+
+  else:
+    sizes_quick = quickSort.loc[quickSort['pc_specs_id'] == spec_id, 'sample_size'].values
+    execution_times_quick = quickSort.loc[quickSort['pc_specs_id'] == spec_id, 'run_time'].values
+     
+
 
   # Função linear (O(n))
   def linear_func(x, a, b):

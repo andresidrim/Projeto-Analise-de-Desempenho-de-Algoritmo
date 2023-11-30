@@ -1,13 +1,29 @@
 from funcoes import *
 
 def main():
+    # Dados do hardware
+    print(f'{pcSpecs}\n\n\n')
+
     # Verificando se os dados coletaos seguem a ordem de complexidade correta
-    CalculandoBubbleSortR2() # Bubble Sort
+    for i in range(0, pcSpecs['id'].count() + 1, 1):
+        if (i == 0):
+            print('No geral:')
+            CalculandoBubbleSortR2() # Bubble Sort
+            print('\n\n')
+            CalculandoMergeSortR2() # Merge Sort
+            print('\n\n')
+            CalculandoQuickSortR2() # Quick Sort
+            print('\n\n\n')
+        else:
+            print(f'Para o computador {i}:')
+            CalculandoBubbleSortR2(i) # Bubble Sort
+            print('\n\n')
+            CalculandoMergeSortR2(i) # Merge Sort
+            print('\n\n')
+            CalculandoQuickSortR2(i) # Quick Sort
+            print('\n\n\n')
+
     print('\n\n')
-    CalculandoMergeSortR2() # Merge Sort
-    print('\n\n')
-    CalculandoQuickSortR2() # Quick Sort
-    print('\n\n\n\n\n')
 
 
 
@@ -31,8 +47,7 @@ def main():
             print('\n\n')
             DescricaoAlgoritimo(GetQuickSort(i), 'Quick Sort') # Descrição do Quick Sort
             print('\n\n\n\n\n')
-
-
+    
 
 
     # Hipotese -> Bubble Sort e Merge Sort possuem um desempeho extremamente similar para amostras menores 
@@ -46,7 +61,6 @@ def main():
             print(f'Para o computador {i}:')
             Hipotese1(i)
             print('\n\n')
-    # Hipotese1() # Compara o Bubble Sort e Merge Sort com amostras de tamanho 100
     
     for i in range(0, pcSpecs['id'].count() + 1, 1):
         if (i == 0):

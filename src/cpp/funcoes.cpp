@@ -101,7 +101,7 @@ int GetMacHardwareInfo(std::vector<std::string> &hardwareInfo) {
   if (sysctlbyname("hw.cputype", &type, &len, nullptr, 0) == 0) {
     switch (type) {
     case CPU_TYPE_ARM64:
-      hardwareInfo.push_back("arm 64");
+      hardwareInfo.push_back("ARM64");
       break;
     case CPU_TYPE_X86:
       hardwareInfo.push_back("x64");
@@ -146,63 +146,63 @@ int GetMacHardwareInfo(std::vector<std::string> &hardwareInfo) {
 
 #elif __LINUX__
 
-std::string GetOSName() {
-  return "Linux";
-}
+// std::string GetOSName() {
+//   return "Linux";
+// }
 
-int GetLinuxHardwareInfo(std::vector<std::string> &hardwareInfo) {
-  // Processor Architecture
-  std::ifstream archFile("/proc/cpuinfo");
-  std::string line;
-  while (std::getline(archFile, line)) {
-    if (line.find("architecture") != std::string::npos) {
-      size_t pos = line.find(":");
-      if (pos != std::string::npos) {
-        hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the architecture information follows ": "
-        break;
-      }
-    }
-  }
-  archFile.close();
+// int GetLinuxHardwareInfo(std::vector<std::string> &hardwareInfo) {
+//   // Processor Architecture
+//   std::ifstream archFile("/proc/cpuinfo");
+//   std::string line;
+//   while (std::getline(archFile, line)) {
+//     if (line.find("architecture") != std::string::npos) {
+//       size_t pos = line.find(":");
+//       if (pos != std::string::npos) {
+//         hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the architecture information follows ": "
+//         break;
+//       }
+//     }
+//   }
+//   archFile.close();
 
-  // Processor Type
-  std::ifstream cpuFile("/proc/cpuinfo");
-  while (std::getline(cpuFile, line)) {
-    if (line.find("model name") != std::string::npos) {
-      size_t pos = line.find(":");
-      if (pos != std::string::npos) {
-        hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the model name information follows ": "
-        break;
-      }
-    }
-  }
-  cpuFile.close();
+//   // Processor Type
+//   std::ifstream cpuFile("/proc/cpuinfo");
+//   while (std::getline(cpuFile, line)) {
+//     if (line.find("model name") != std::string::npos) {
+//       size_t pos = line.find(":");
+//       if (pos != std::string::npos) {
+//         hardwareInfo.push_back(line.substr(pos + 2)); // Assuming the model name information follows ": "
+//         break;
+//       }
+//     }
+//   }
+//   cpuFile.close();
 
-  // Memory
-  std::ifstream memFile("/proc/meminfo");
-  while (std::getline(memFile, line)) {
-    if (line.find("MemTotal") != std::string::npos) {
-      std::istringstream iss(line);
-      std::string token, value;
-      iss >> token >> value;
-      hardwareInfo.push_back(value);
-      break;
-    }
-  }
-  memFile.close();
+//   // Memory
+//   std::ifstream memFile("/proc/meminfo");
+//   while (std::getline(memFile, line)) {
+//     if (line.find("MemTotal") != std::string::npos) {
+//       std::istringstream iss(line);
+//       std::string token, value;
+//       iss >> token >> value;
+//       hardwareInfo.push_back(value);
+//       break;
+//     }
+//   }
+//   memFile.close();
 
-  // Number of Processors
-  int cpuCount = std::thread::hardware_concurrency();
-  if (cpuCount > 0) {
-    hardwareInfo.push_back(std::to_string(cpuCount));
-  }
-  else {
-    std::cerr << "Failed to get CPU information." << std::endl;
-    return EXIT_FAILURE;
-  }
+//   // Number of Processors
+//   int cpuCount = std::thread::hardware_concurrency();
+//   if (cpuCount > 0) {
+//     hardwareInfo.push_back(std::to_string(cpuCount));
+//   }
+//   else {
+//     std::cerr << "Failed to get CPU information." << std::endl;
+//     return EXIT_FAILURE;
+//   }
 
-  return EXIT_SUCCESS;
-}
+//   return EXIT_SUCCESS;
+// }
 
 #endif
 
