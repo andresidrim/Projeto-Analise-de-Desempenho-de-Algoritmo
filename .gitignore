@@ -1,3 +1,5 @@
 .vscode/
 
 src/python/senha.py
+
+src/cpp/main.exe
