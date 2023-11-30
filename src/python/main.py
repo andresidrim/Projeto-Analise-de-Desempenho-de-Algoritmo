@@ -54,12 +54,12 @@ def main():
     for i in range(0, pcSpecs['id'].count() + 1, 1):
         if (i == 0):
             print('No geral:')
-            Hipotese1()
+            Hipotese()
             print('\n\n')
 
         else:
             print(f'Para o computador {i}:')
-            Hipotese1(i)
+            Hipotese(i)
             print('\n\n')
     
     for i in range(0, pcSpecs['id'].count() + 1, 1):

@@ -44,9 +44,9 @@ def DescricaoAlgoritimo(algoritimo, nome):
 
 
 
-# Hipotese 1 -> BubbleSortRunTimeGeral e MergeSortRunTimeGeral possuem um desempeho extremamente similar para amostras menores
+# Hipotese -> BubbleSortRunTimeGeral e MergeSortRunTimeGeral possuem um desempeho extremamente similar para amostras menores
 
-def Hipotese1(spec_id = ''):
+def Hipotese(spec_id = ''):
   alpha = 0.05
 
   if spec_id == '':
