@@ -66,7 +66,7 @@ def main():
         if (i == 0):
             print('No geral:')
             MergeMaisRapido()
-            print('\n\n')
+            print('\n\n') 
         
         else:
             print(f'Para o computador {i}:')

@@ -4,6 +4,7 @@ import numpy as np
 from scipy.stats import ttest_ind, t
 from sklearn.metrics import r2_score
 from scipy.optimize import curve_fit
+import matplotlib.pyplot as plt
 
 def MaisRapidoPorcentagem(bubble, merge, quick):
   for i in range(0, 3, 1):
@@ -71,9 +72,27 @@ def MergeMaisRapido(spec_id = ''):
   if media_merge_sort < media_bubble_sort:
     diferenca_percentual = abs(((media_merge_sort - media_bubble_sort) / media_bubble_sort)) * 100
     print(f"O Merge Sort é {diferenca_percentual:.2f}% mais rápido em relação ao Bubble Sort nesse caso")
+
+    # Plotar o gráfico
+    labels = ['Bubble Sort', 'Merge Sort']
+    tempos_medios = [media_bubble_sort, media_merge_sort]
+
+    plt.bar(labels, tempos_medios, color=['red', 'blue'])
+    plt.ylabel('Tempo Médio')
+    plt.title('Comparação de Tempo Médio entre Bubble Sort e Merge Sort')
+    plt.show()
   else:
     diferenca_percentual = abs(((media_bubble_sort - media_merge_sort) / media_merge_sort)) * 100
     print(f"O Bubble Sort é {diferenca_percentual:.2f}% mais rápido em relação ao Merge Sort nesse caso")
+
+    # Plotar o gráfico
+    labels = ['Bubble Sort', 'Merge Sort']
+    tempos_medios = [media_bubble_sort, media_merge_sort]
+
+    plt.bar(labels, tempos_medios, color=['red', 'blue'])
+    plt.ylabel('Tempo Médio')
+    plt.title('Comparação de Tempo Médio entre Bubble Sort e Merge Sort')
+    plt.show()
 
 
 # Qual o algoritimo mais rapido para cada tamanho de amostra?
@@ -181,15 +200,15 @@ def CalculandoQuickSortR2(spec_id = ''):
      
 
 
-  # Função linear (O(n))
-  def linear_func(x, a, b):
+  # Função linearitimica (O(n logn))
+  def log_func(x, a, b):
       return a * x * np.log(x) + b
 
-  # Ajuste dos dados à função linear
-  params_quick, covariance_quick = curve_fit(linear_func, sizes_quick, execution_times_quick)
+  # Ajuste dos dados à função linearitimica
+  params_quick, covariance_quick = curve_fit(log_func, sizes_quick, execution_times_quick)
 
   # Previsões usando a função ajustada
-  predictions_quick = linear_func(sizes_quick, *params_quick)
+  predictions_quick = log_func(sizes_quick, *params_quick)
 
   # Cálculo do R²
   r_squared_quick = r2_score(execution_times_quick, predictions_quick)
